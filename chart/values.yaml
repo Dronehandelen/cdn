@@ -1,0 +1,9 @@
+replicaCount: 1
+name: cdn
+image: 'this must be set'
+port: 80
+config:
+    baseDomain: dronehandelen.no
+    googleCredentials: 'this must be set'
+    bucket:
+        storage: 'bucket'
