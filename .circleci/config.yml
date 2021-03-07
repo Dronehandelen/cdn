@@ -37,7 +37,7 @@ jobs:
                       export CONFIG_DB_USER=$GCP_POSTGRES_USERNAME
                       export CONFIG_DB_PASSWORD=$GCP_POSTGRES_PASSWORD
                       yarn migrate
-            - run: gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+            - run: gcloud --quiet container clusters get-credentials ${GCP_CLUSTER_NAME}
             - run:
                   name: Deploy helm chart
                   command: |
