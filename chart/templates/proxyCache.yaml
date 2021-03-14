@@ -73,5 +73,5 @@ spec:
               mountPath: /data/nginx/cache
       volumes:
         - name: proxy-cache-pvc
-          persitentVolumeClaim:
+          persistentVolumeClaim:
             claimName: {{ .Values.name }}-proxy-cache-pvc
