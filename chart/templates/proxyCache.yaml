@@ -68,7 +68,7 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          volumesMounts:
+          volumeMounts:
             - name: proxy-cache-pvc
               mountPath: /data/nginx/cache
       volumes:
