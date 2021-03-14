@@ -43,6 +43,7 @@ jobs:
                   command: |
                       helm upgrade --install cdn \
                         --set image="dronehandelen/cdn:${CIRCLE_SHA1}" \
+                        --set proxyCacheImage="dronehandelen/cdn-proxy-cache:${CIRCLE_SHA1}" \
                         --namespace production \
                         ./chart
 
@@ -60,6 +61,7 @@ workflows:
                       branches:
                           only: master
             - docker/publish:
+                  name: publish-main
                   attach-at: ./
                   cache_from: dronehandelen/cdn:latest
                   image: dronehandelen/cdn
@@ -74,11 +76,28 @@ workflows:
                   filters:
                       branches:
                           only: master
+            - docker/publish:
+                  name: publish-proxy-cache
+                  attach-at: ./
+                  cache_from: dronehandelen/cdn-proxy-cache:latest
+                  image: dronehandelen/cdn-proxy-cache
+                  tag: ${CIRCLE_SHA1},latest
+                  extra_build_args: '--target proxy-cache'
+                  docker-username: DOCKER_HUB_USERNAME
+                  docker-password: DOCKER_HUB_TOKEN
+                  context:
+                      - hub
+                  requires:
+                      - build
+                  filters:
+                      branches:
+                          only: master
             - deploy:
                   context:
                       - GCP
                   requires:
-                      - docker/publish
+                      - publish-proxy-cache
+                      - publish-main
                   filters:
                       branches:
                           only: master

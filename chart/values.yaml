@@ -1,6 +1,7 @@
 replicaCount: 1
 name: cdn
 image: 'this must be set'
+proxyCacheImage: 'this must be set'
 port: 80
 config:
     baseDomain: dronehandelen.no
