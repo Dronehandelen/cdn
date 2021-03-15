@@ -1,12 +1,17 @@
-export default (stream, res) => {
+export default (stream, res, extraPipes = []) => {
     return new Promise((resolve, reject) => {
-        stream
+        let newStream = stream
             .on('error', () => {
                 reject(new Error('Problems finding file'));
             })
-            .on('end', function() {
+            .on('end', function () {
                 resolve();
-            })
-            .pipe(res);
+            });
+
+        newStream = extraPipes.reduce(
+            (newStream, pipe) => newStream.pipe(pipe),
+            newStream
+        );
+        newStream.pipe(res);
     });
 };

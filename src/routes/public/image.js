@@ -6,6 +6,7 @@ import ValidationException, {
     validationError,
 } from '../../exceptions/validation.js';
 import moment from 'moment';
+import sharp from 'sharp';
 
 const router = express.Router();
 
@@ -44,7 +45,18 @@ router.get('/images/:fileName', (req, res, next) => {
 
         return await streamResponse(
             await Storage.get(file.bucket, file.filePath),
-            res
+            res,
+            [
+                (req.query.maxWidth || req.query.maxHeight) &&
+                    sharp().resize({
+                        width:
+                            req.query.maxWidth && parseInt(req.query.maxWidth),
+                        height:
+                            req.query.maxHeight &&
+                            parseInt(req.query.maxHeight),
+                        withoutEnlargement: true,
+                    }),
+            ].filter(Boolean)
         );
     };
 
