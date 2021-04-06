@@ -3,7 +3,7 @@ import logger from './services/logger.js';
 import { queryBuilder as db } from './services/db.js';
 
 db.migrate
-    .up()
+    .latest()
     .then(() => {
         logger.info(chalk.green(`Migration is done`));
         process.exit(0);
